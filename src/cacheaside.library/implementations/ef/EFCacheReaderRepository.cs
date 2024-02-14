@@ -12,9 +12,11 @@ namespace cacheaside.library.implementations.ef;
 public class EFCacheReaderRepository<T> : EFReaderRepository<T>, IRepositoryReader<T> where T : class
 {
     ICacheProvider _cacheProvider;
+    TimeSpan _dataTTL;
 
-    public EFCacheReaderRepository(DbContext context, ICacheProvider cacheProvider) : base(context) {
+    public EFCacheReaderRepository(DbContext context, ICacheProvider cacheProvider, TimeSpan dataTTL) : base(context) {
         _cacheProvider = cacheProvider;
+        _dataTTL = dataTTL;
     }
 
     public override async Task<bool> Any(Expression<Func<T, bool>> expression)
@@ -30,14 +32,14 @@ public class EFCacheReaderRepository<T> : EFReaderRepository<T>, IRepositoryRead
     public override Task<List<T>> GetAll()
     {
         var cacheName = GetCacheName();
-        return _cacheProvider.GetValueOrInitializeAsync<List<T>>(cacheName, () => base.GetAll(), TimeSpan.FromMinutes(60))!;
+        return _cacheProvider.GetValueOrInitializeAsync<List<T>>(cacheName, () => base.GetAll(), _dataTTL)!;
     }
 
     public override Task<List<T>> GetAll(Expression<Func<T, bool>> expression)
     {
         var cacheName = GetCacheName(keys:expression.ToString());
         return _cacheProvider.GetValueOrInitializeAsync<List<T>>(
-            cacheName, () => base.GetAll(expression), TimeSpan.FromMinutes(60)
+            cacheName, () => base.GetAll(expression), _dataTTL
         )!;
     }
 
@@ -47,7 +49,7 @@ public class EFCacheReaderRepository<T> : EFReaderRepository<T>, IRepositoryRead
         return _cacheProvider.GetValueOrInitializeAsync<T>(
             cacheName,
             () => base.GetOne(expression),
-            TimeSpan.FromMinutes(60)
+            _dataTTL
         );
     }
 }

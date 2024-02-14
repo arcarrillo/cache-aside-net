@@ -26,7 +26,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var result = await repository.GetAll();
 
                 result.Should().NotBeEmpty();
@@ -55,7 +55,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var result = await repository.GetAll();
 
                 result.Should().NotBeEmpty();
@@ -92,7 +92,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var result = await repository.GetAll(x => x.Surname == "test1");
 
                 result.Should().NotBeNull();
@@ -131,7 +131,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var result = await repository.GetAll(x => x.Surname == "test1");
 
                 result.Should().NotBeNull();
@@ -172,7 +172,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var repository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var result = await repository.GetOne(x => x.Surname == "test1");
 
                 result.Should().NotBeNull();
@@ -207,7 +207,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var writerRepository = new EFCacheWriterRepository<Person>(context, cacheProvider);
 
                 var result = await readerRepository.GetAll(x => x.Surname == "test1");
@@ -247,7 +247,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var writerRepository = new EFCacheWriterRepository<Person>(context, cacheProvider);
 
                 var result = await readerRepository.GetOne(x => x.Surname == "test1");
@@ -288,7 +288,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var writerRepository = new EFCacheWriterRepository<Person>(context, cacheProvider);
 
                 var result = await readerRepository.GetAll(x => x.Surname == "test1");
@@ -326,7 +326,7 @@ namespace cacheaside.library.tests.implementations.ef
             try
             {
                 //TEST
-                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider);
+                var readerRepository = new EFCacheReaderRepository<Person>(context, cacheProvider, TimeSpan.FromMinutes(1));
                 var writerRepository = new EFCacheWriterRepository<Person>(context, cacheProvider);
 
                 using (var transaction = writerRepository.BeginTransaction())
