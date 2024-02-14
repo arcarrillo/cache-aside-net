@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace cacheaside.library.interfaces;
-public interface IRepositoryReader<T> where T : class
+public interface IReaderRepository<T> where T : class
 {
     /// <summary>
     /// Get all items of type T

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace cacheaside.library.implementations.ef
 {
-    public class EFReaderRepository<T>(DbContext context) : IRepositoryReader<T> where T : class
+    public class EFReaderRepository<T>(DbContext context) : IReaderRepository<T> where T : class
     {
         public virtual async Task<bool> Any(Expression<Func<T, bool>> expression) => (await GetAll(expression))?.Any() ?? false;
 

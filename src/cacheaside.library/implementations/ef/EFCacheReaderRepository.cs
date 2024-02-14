@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace cacheaside.library.implementations.ef;
 
-public class EFCacheReaderRepository<T> : EFReaderRepository<T>, IRepositoryReader<T> where T : class
+public class EFCacheReaderRepository<T> : EFReaderRepository<T>, IReaderRepository<T> where T : class
 {
     ICacheProvider _cacheProvider;
     TimeSpan _dataTTL;

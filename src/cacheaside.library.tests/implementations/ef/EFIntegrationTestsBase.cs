@@ -1,4 +1,5 @@
-﻿using cacheaside.library.implementations.redis;
+﻿using cacheaside.library.implementations.ef;
+using cacheaside.library.implementations.redis;
 using cacheaside.library.interfaces;
 using cacheaside.library.tests.model;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,16 @@ public abstract class EFIntegrationTestsBase
                 return new Context();
             });
 
+            serviceCollection.AddScoped<IReaderRepository<Person>>(sp =>
+            {
+                return new EFCacheReaderRepository<Person>(
+                    sp.GetRequiredService<Context>(),
+                    sp.GetRequiredService<ICacheProvider>(),
+                    TimeSpan.FromMinutes(60)
+                );
+            });
+            serviceCollection.AddScoped<IWriterRepository<Person>, EFCacheWriterRepository<Person>>();
+
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
             var ctx = _serviceProvider.GetRequiredService<Context>();
@@ -37,5 +48,34 @@ public abstract class EFIntegrationTestsBase
         }
 
         return _serviceProvider;
+    }
+}
+
+public interface IPeopleReaderService
+{
+    Task<IEnumerable<Person>> GetAllPeopleByName(string name);
+}
+
+public class PeopleReaderService(IReaderRepository<Person> repository) : IPeopleReaderService
+{
+
+    public async Task<IEnumerable<Person>> GetAllPeopleByName(string name)
+    {
+        return await repository.GetAll(x => x.Name == name);
+    }
+
+}
+
+public interface IPeopleWriterService
+{
+    bool AddNewPerson(string name, string surname);
+}
+
+public class PeopleWriterService(IWriterRepository<Person> repository) : IPeopleWriterService
+{
+    public bool AddNewPerson(string name, string surname)
+    {
+        repository.Add(new Person { Name = name, Surname = surname });
+        return true;
     }
 }
